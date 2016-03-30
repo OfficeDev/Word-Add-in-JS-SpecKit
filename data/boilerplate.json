@@ -1,0 +1,51 @@
+{
+    "elements": [
+        {
+            "name": "Change log",
+            "type": "section",
+            "text": "Change log section"
+        },
+        {
+            "name": "Justification",
+            "type": "section",
+            "text": "Justification"
+        },
+
+        {
+            "name": "Non-goals",
+            "type": "section",
+            "text": "Non-goals section"
+        },
+        {
+            "name": "Milestones",
+            "type": "section",
+            "text": "Milestones section"
+        },
+        {
+            "name": "Design storyboard",
+            "type": "section",
+            "text": "Design storyboard"
+        },
+        {
+            "name": "Dependencies and risks",
+            "type": "section",
+            "text": "Dependencies and risks"
+        },
+        {
+            "name": "Open questions",
+            "type": "section",
+            "text": "Open questions"
+        },
+
+        {
+            "name": "Additional resources",
+            "type": "section",
+            "text": "Additional resources"
+        },
+        {
+            "name": "Bad words",
+            "type": "sentence",
+            "text": "The use of the words foo, fubar, and foobar are frowned upon."
+        }
+    ]
+}

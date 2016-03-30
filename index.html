@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+ See LICENSE in the project root for license information -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <meta name="description" content="SpecKit addin for Word">
+    <title>SpecKit Word add-in sample</title>
+
+    <!--During development turn off caching-->
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.1.min.js"></script>
+
+    <!-- Change this after the production CDN is updated. -->
+    <script src="https://appsforoffice.microsoft.com/lib/beta/hosted/office.js" type="text/javascript"></script>
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.min.css">
+    <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css">
+
+    <!-- Fabric components -->
+    <script src="Jquery.Dropdown.js"></script>
+    <script src="textfield.js"></script>
+
+    <!-- Sample components -->
+    <script src="validation.js" type="text/javascript"></script>
+    <script src="boilerplate.js" type="text/javascript"></script>
+    <script src="authorCustomXml.js" type="text/javascript"></script>
+    <script src="sample.js"></script>
+</head>
+
+<body class="ms-font-m">
+    <div class="home flex-container">
+        <div class="ms-Grid header ms-bgColor-themeDarker">
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+                    <span class="ms-font-xl ms-fontColor-themeLighter ms-fontWeight-semibold">Boilerplate and reusable text</span>
+                </div>
+            </div>
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+
+                    <div class="ms-font-m ms-fontColor-themeLight header--text header--spacer">
+                        <div class="ms-TextField ms-TextField--placeholder">
+                            <label id="authorLabel" class="ms-Label">Enter author's name</label>
+                            <input id="author" class="ms-TextField-field" type="text">
+
+                            <button id="updateAuthor" class="ms-Button ms-Button--primary">
+                                <span class="ms-Button-icon">
+                                <i class="ms-Icon ms-Icon--plus"></i>
+                            </span>
+                                <span class="ms-Button-label">Update author name</span>
+                                <span class="ms-Button-description">Change name of author</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+                    <div class="ms-font-m ms-fontColor-themeLight header--text header--spacer">
+                        <div class="ms-TextField ms-TextField--placeholder header--spacer">
+                            <label class="ms-Label">Enter boilerplate name</label>
+                            <input id="inputAddBoilerplateSentence" class="ms-TextField-field" type="text">
+                            <button id="btnAddBoilerplateSentence" class="ms-Button ms-Button--primary">
+                                <span class="ms-Button-icon ">
+                                    <i class="ms-Icon ms-Icon--plus "></i>
+                                </span>
+                                <span class="ms-Button-label ">Add sentence to boilerplate</span>
+                                <span class="ms-Button-description ">Add sentence to boilerplate store for reuse</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+                    <div class="ms-font-m ms-fontColor-themeLight header--text header--spacer">
+                        <div class="ms-TextField ms-TextField--placeholder header--spacer">
+                            <label id="lblAddBoilerplateParagraph" class="ms-Label">Enter boilerplate name</label>
+                            <input id="inputAddBoilerplateParagraph" class="ms-TextField-field" type="text">
+                            <button id="btnAddBoilerplateParagraph" class="ms-Button ms-Button--primary">
+                                <span class="ms-Button-icon">
+                                    <i class="ms-Icon ms-Icon--plus"></i>
+                                </span>
+                                <span class="ms-Button-label">Add paragraph to boilerplate</span>
+                                <span class="ms-Button-description">Add paragraph to boilerplate store for reuse</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+                    <div class="header--spacer">
+                        <div class="ms-Dropdown">
+                            <i class="ms-Dropdown-caretDown ms-Icon ms-Icon--caretDown"></i>
+                            <select id="boilerplateDropdown" class="ms-Dropdown-select">
+                                <option selected disabled value="Select section heading">Insert boilerplate...</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+                    <div class="header--spacer footer--space">
+                        <button id="btnSaveBoilerplate" class="ms-Button ms-Button--primary">
+                            <span class="ms-Button-icon">
+                                <i class="ms-Icon ms-Icon--plus"></i>
+                            </span>
+                            <span class="ms-Button-label">Save boilerplate</span>
+                            <span class="ms-Button-description">POST the boilerplate back to the service.</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="ms-Grid-row">
+                <div class="ms-Grid-col">
+                    <div class="header--spacer footer--space">
+                        <button id="testFunctionFileCode" class="ms-Button ms-Button--primary">
+                            <span class="ms-Button-icon">
+                                <i class="ms-Icon ms-Icon--plus"></i>
+                            </span>
+                            <span class="ms-Button-label">Test</span>
+                            <span class="ms-Button-description">Test functionfile</span>
+                        </button>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+
+        <div class="content flex-item" id="parent">
+            <!-- Put info here below the main box. -->
+        </div>
+    </div>
+</body>
+
+</html>
