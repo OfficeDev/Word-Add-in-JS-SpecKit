@@ -1,4 +1,4 @@
-# Word Add in JavaScript SpecKit
+# Word Add-in JavaScript SpecKit
 
 Learn how you can create an add-in that captures and inserts boilerplate text, and how you can implement a simple document validation process.
 
