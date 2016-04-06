@@ -30,6 +30,20 @@
             <Host xsi:type="Document">
                 <!-- DesktopFormFactor declares that the functionality is for Word on the Windows desktop. -->
                 <DesktopFormFactor>
+                <!--GetStarted information used on the callout that appears when installing the add-in.   
+                   Ensure you have build 16.0.6769 or above for GetStarted section to work-->  
+                     <GetStarted>  
+    					<!--Title of the Getting Started callout. resid points to a ShortString resource -->  
+    					<Title resid="Contoso.GetStarted.Title"/>  
+				  
+        				<!--Description of the Getting Started callout. resid points to a LongString resource -->  
+                        <Description resid="Contoso.GetStarted.Description"/> 
+                        
+    					<!--Not used right now but you need to provide a valid resource. We will add code in the future to consume this URL.   
+    						resid points to a Url resource -->  
+    					<LearnMoreUrl resid="Contoso.GetStarted.LearnMoreUrl"/>  
+        				</GetStarted>  
+
                     <!-- Identifies the html file the contains a script reference to a function that an add-in command will use. -->
                     <FunctionFile resid="InsertImageMenuUrl"/>
                     <!-- PrimaryCommandSurface declares that this add-in
@@ -160,6 +174,10 @@
                 <bt:Url id="InsertImageMenuUrl" DefaultValue="https://localhost:8080/functionfile.html">
 
                 </bt:Url>
+                <!--LearnMore URL currently not used -->  
+                <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://github.com/OfficeDev/Word-Add-in-JS-SpecKit">  
+                </bt:Url>  
+
             </bt:Urls>
             <!-- Be careful about mixing up what can be a short and a long string.
                     A common issue with add-in commands is mixing short and long strings.
@@ -215,6 +233,10 @@
                 <bt:String id="Ctx_Control_SuperTip_Label" DefaultValue="SpecKit add-in supertip">
 
                 </bt:String>
+                <bt:String id="Contoso.GetStarted.Title" DefaultValue="Word SpecKit add-in has loaded successfully">  
+                <bt:Override Locale="ja-jp" Value="JA-JP Get Started Title" />  
+                </bt:String>   
+
             </bt:ShortStrings>
             <bt:LongStrings>
                 <!-- Delete this if not used -->
@@ -226,9 +248,10 @@
                 </bt:String>
                 <bt:String id="Control_SuperTip_Desc" DefaultValue="Check for long sentences, word count and blacklisted words.">
                 </bt:String>
-
                 <bt:String id="Ctx_Control_SuperTip_Desc" DefaultValue="Inserts a template from the FunctionFile.">
                 </bt:String>
+                <bt:String id="Contoso.GetStarted.Description" DefaultValue="Click the SpecKit add-in tab on the Office ribbon to use the add-in">  
+                </bt:String>     
             </bt:LongStrings>
         </Resources>
     </VersionOverrides>
