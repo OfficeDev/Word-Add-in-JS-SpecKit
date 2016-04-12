@@ -69,7 +69,8 @@ function validateAgainstBlacklist() {
             // found in the document and in the blacklist.
             var arrayOfFoundBlackListWords = intersect_safe(wordsText, blacklist.badwords);
 
-            notifyFoundWords(arrayOfFoundBlackListWords);
+            var notifyPromise = notifyFoundWords(arrayOfFoundBlackListWords);
+            return notifyPromise;
         });
     }).catch(function(error) {
         console.log('Error: ' + JSON.stringify(error));
@@ -102,23 +103,43 @@ function intersect_safe(a, b) {
     return result;
 }
 
-
 /**
  * Add the words to local storage for access from the dialog.
  * Open the dialog to provide notification of found words.
  */
 function notifyFoundWords(arrayOfFoundBlackListWords) {
+    return Q.Promise(function(resolve, reject) {
 
-    // Put the array of bad words into local storage so that we can
-    // access them from the dialog.
-    localStorage.setItem('badwords', JSON.stringify(arrayOfFoundBlackListWords));
+        // Put the array of bad words into local storage so that we can
+        // access them from the dialog.
+        localStorage.setItem('badwords', JSON.stringify(arrayOfFoundBlackListWords));
 
-    var url = getCurrentUrl() + 'dialog';
+        var url = getCurrentUrl() + 'dialog';
 
-    // Call the dialog API.
-    Office.context.ui.displayDialogAsync(url,
-        { height: 30, width: 20, requireHTTPS: true },
-        dialogCallback);
+        // Call the dialog API.
+        Office.context.ui.displayDialogAsync(url, {
+            height: 30,
+            width: 20,
+            requireHTTPS: true
+        }, function(asyncResult) {
+            dialog = asyncResult.value;
+
+            // Listen for events that occur on the dialog object. This gives us
+            // an entry point for actions after the dialog closes, or if the
+            // dialog sends a message with messageParent().
+            dialog.addEventHandler(Microsoft.Office.WebExtension.EventType.DialogEventReceived, function(event) {
+
+                // See the ErrorCodeManager in the OfficeJS library for error codes.
+                // Error 12002 indicates that the dialog page can't be found.
+                if (event.error === 12002) {
+                    reject(null);
+                }
+                else {
+                    resolve();
+                }
+            });
+        });
+    });
 }
 
 /**
@@ -131,6 +152,7 @@ var dialog;
  * The callback for the displayDialogAsync call to open the dialog UI.
  */
 function dialogCallback(asyncResult) {
+
     dialog = asyncResult.value;
 
     // Listen for events that occur on the dialog object. This gives us
@@ -149,7 +171,6 @@ function dialogCallback(asyncResult) {
  * Handle the events that occur on the dialog object.
  */
 function processEvent(args) {
-
     if (args.type === 'dialogEventReceived') {
         // The dialog has been closed.
     }
@@ -158,6 +179,7 @@ function processEvent(args) {
         // The dialog object sent a message to the add-in.
     }
 }
+
 /**
  * Get the base URL for the call.
  */

@@ -29,7 +29,7 @@
                 // HTML function file because there isn't a well-defined way to
                 // test and debug code that is referenced by, or contained in, the
                 // function file.
-                // $('#testFunctionFileCode').click(onTestFunctionFileCode);
+                //$('#testFunctionFileCode').click(onTestFunctionFileCode);
 
                 // This is in authorCustomXml.js.
                 $('#updateAuthor').click(updateAuthor);
@@ -100,11 +100,12 @@
 
             // Synchronize the document state by executing the queued command to
             // insert the template into the current document,
-            // call getBlackList/getBoilerplate to set custom XML parts in the document,
+            // call getBlackList/getBoilerplate to,
             // and return a promise to indicate task completion.
             return context.sync()
-                .then(getBlackList())
-                .then(getBoilerplate());
+                .then(getBlackList)
+                .then(getBoilerplate)
+                .then(context.sync);
         }).catch(function(error) {
             console.log('Error: ' + JSON.stringify(error));
             if (error instanceof OfficeExtension.Error) {
@@ -133,6 +134,10 @@
                 .then(function(json) {
                     localStorage.setItem('badwordcache', json);
                 });
+        } else {
+            return Q.fcall(function() {
+                return 'The bad words cache exists.';
+            });
         }
     }
 
@@ -207,7 +212,6 @@
             request.open("GET", url, true);
             request.onload = onload;
             request.onerror = onerror;
-            request.onprogress = onprogress;
 
             function onload() {
                 if (request.status === 200) {
@@ -259,8 +263,8 @@
      **************************************************************************/
 
     // Temp function for testing add-in command
-    function onTestFunctionFileCode() {
-        validateAgainstBlacklist();
-    }
+    // function onTestFunctionFileCode() {
+    //     validateAgainstBlacklist();
+    // }
 
 })();
