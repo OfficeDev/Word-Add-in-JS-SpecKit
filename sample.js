@@ -29,7 +29,7 @@
                 // HTML function file because there isn't a well-defined way to
                 // test and debug code that is referenced by, or contained in, the
                 // function file.
-                // $('#testFunctionFileCode').click(onTestFunctionFileCode);
+                //$('#testFunctionFileCode').click(onTestFunctionFileCode);
 
                 // This is in authorCustomXml.js.
                 $('#updateAuthor').click(updateAuthor);
@@ -76,7 +76,11 @@
         var getTemplateUrl = getCurrentUrl() + 'gettemplate';
 
         // Fetch the template and then insert it into the current document's body.
-        httpGetAsync(getTemplateUrl, insertFileIntoBody);
+        var urlPromise = httpGetAsync(getTemplateUrl);
+        urlPromise.then(insertFileIntoBody)
+            .catch(function(err) {
+                console.log('Error: ' + err);
+            });
     }
 
     /**
@@ -88,7 +92,7 @@
      **/
     function insertFileIntoBody(templateBase64) {
         // Entry point for accessing the Word object model.
-        Word.run(function(context) {
+        return Word.run(function(context) {
 
             // Queue a command to insert the template into the current document.
             var body = context.document.body;
@@ -96,18 +100,18 @@
 
             // Synchronize the document state by executing the queued command to
             // insert the template into the current document,
-            // call getBlackList/getBoilerplate to set custom XML parts in the document,
+            // call getBlackList/getBoilerplate to,
             // and return a promise to indicate task completion.
             return context.sync()
-                .then(getBlackList())
-                .then(getBoilerplate());
-        })
-            .catch(function(error) {
-                console.log('Error: ' + JSON.stringify(error));
-                if (error instanceof OfficeExtension.Error) {
-                    console.log('Debug info: ' + JSON.stringify(error.debugInfo));
-                }
-            });
+                .then(getBlackList)
+                .then(getBoilerplate)
+                .then(context.sync);
+        }).catch(function(error) {
+            console.log('Error: ' + JSON.stringify(error));
+            if (error instanceof OfficeExtension.Error) {
+                console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+            }
+        });
     }
 
     /**
@@ -124,9 +128,15 @@
             // that is blacklist.
             var getBlacklistUrl = getCurrentUrl() + 'blacklist';
 
-            // Call the service to get the blacklist, and then cache it in localStorage.
-            httpGetAsync(getBlacklistUrl, function(json) {
-                localStorage.setItem('badwordcache', json);
+            // Call the service to get the blacklist, and then cache it in
+            // localStorage, then return the promise.
+            return httpGetAsync(getBlacklistUrl)
+                .then(function(json) {
+                    localStorage.setItem('badwordcache', json);
+                });
+        } else {
+            return Q.fcall(function() {
+                return 'The bad words cache exists.';
             });
         }
     }
@@ -142,31 +152,33 @@
         // at ? _host_Info. See server.js for the route that is boilerplate.
         var getBoilerplateUrl = getCurrentUrl() + 'boilerplate';
 
-        // Call the service to get the boilerplate and add it to localStorage.
-        httpGetAsync(getBoilerplateUrl, function(json) {
+        // Call the service to get the boilerplate and add it to localStorage,
+        // then return the promise.
+        return httpGetAsync(getBoilerplateUrl)
+            .then(function(json) {
 
-            // Put the array of bad words into local storage so that we can
-            // access them.
-            localStorage.setItem('boilerplate', json);
-            var boilerplate = JSON.parse(json);
+                // Put the array of bad words into local storage so that we can
+                // access them.
+                localStorage.setItem('boilerplate', json);
+                var boilerplate = JSON.parse(json);
 
-            var elements = boilerplate.elements;
+                var elements = boilerplate.elements;
 
-            // Add the boilerplate names to the drop down.
-            for (var i = 0; i < elements.length; i++) {
-                $('#boilerplateDropdown').append(new Option(elements[i].name,
-                    elements[i].name));
-            }
+                // Add the boilerplate names to the drop down.
+                for (var i = 0; i < elements.length; i++) {
+                    $('#boilerplateDropdown').append(new Option(elements[i].name,
+                        elements[i].name));
+                }
 
-            // Initialize stylized fabric UI for dropdown and call the dropdown
-            // function to populate dropdown with values. You need to call this
-            // when you update contents of a dropdown.
-            $(".ms-Dropdown").Dropdown();
-        });
+                // Initialize stylized fabric UI for dropdown and call the dropdown
+                // function to populate dropdown with values. You need to call this
+                // when you update contents of a dropdown.
+                $(".ms-Dropdown").Dropdown();
+            });
     }
 
     /**
-     * Save the current boilerplate state with the services
+     * Save the current boilerplate state with the services.
      **/
     function saveBoilerplate() {
 
@@ -177,42 +189,69 @@
 
         var boilerplate = localStorage.getItem('boilerplate');
 
-        httpPostAsync(postBoilerplateUrl, boilerplate, function() {
-            console.log('Posted the boilerplate back to the service.')
-        });
+        httpPostAsync(postBoilerplateUrl, boilerplate)
+            .then(function(value) {
+                console.log(value);
+            })
+            .catch(function(error) {
+                console.log('Error: ' + JSON.stringify(error));
+            });
     }
 
     /**
      * GET helper to call a service.
+     *
      * @param theUrl {string} The URL of the service.
      * @param callback {function} The callback function.
      */
-    function httpGetAsync(theUrl, callback) {
-        var request = new XMLHttpRequest();
-        request.open("GET", theUrl, true);
-        request.onreadystatechange = function() {
-            if (request.readyState === 4 && request.status === 200)
-                callback(request.responseText);
-        }
-        request.send(null);
+    function httpGetAsync(url) {
+
+        return Q.Promise(function(resolve, reject) {
+            var request = new XMLHttpRequest();
+
+            request.open("GET", url, true);
+            request.onload = onload;
+            request.onerror = onerror;
+
+            function onload() {
+                if (request.status === 200) {
+                    resolve(request.responseText);
+                } else {
+                    reject(new Error("Status code: " + request.status));
+                }
+            }
+
+            function onerror() {
+                reject(new Error('Status code: ' + request.status));
+            }
+            request.send();
+        });
     }
 
     /**
      * POST helper to call a service.
+     *
      * @param theUrl {string} The URL of the service.
      * @param payload {string} The JSON payload.
      * @param callback {function} The callback function.
      */
-    function httpPostAsync(theUrl, payload, callback) {
+    function httpPostAsync(url, payload) {
         var request = new XMLHttpRequest();
+        var deferred = Q.defer();
 
-        request.open("POST", theUrl, true);
+        request.open("POST", url, true);
         request.setRequestHeader("Content-type", "application/json");
-        request.onreadystatechange = function() {
-            if (request.readyState === 4 && request.status === 200)
-                callback(request.responseText);
-        }
+        request.onreadystatechange = onreadystatechange;
         request.send(payload);
+
+        function onreadystatechange() {
+            if (request.readyState === 4 && request.status === 200) {
+                deferred.resolve("Successful post");
+            } else {
+                deferred.reject(new Error('Status code: ' + request.status));
+            }
+        }
+        return deferred.promise;
     }
 
     /**************************************************************************/
@@ -224,8 +263,8 @@
      **************************************************************************/
 
     // Temp function for testing add-in command
-    function onTestFunctionFileCode() {
-        validateAgainstBlacklist();
-    }
+    // function onTestFunctionFileCode() {
+    //     validateAgainstBlacklist();
+    // }
 
 })();
