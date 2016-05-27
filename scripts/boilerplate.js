@@ -4,98 +4,31 @@
  */
 
 /**
- * Shows how to get the sentence of the current selection. This example shows
- * how to get the current paragraph of the selection, get all of the sentences
- * in the paragraph, and then compare each sentence to the original selection
- * to determine which sentence contains the selection. This is essentially
- * like expanding a range to the bounds of the sentence that contains the range.
+ * Shows how to get the sentence of the current selection.
  **/
 function addBoilerplateSentence() {
 
-    Word.run(function(context) {
+    Word.run(function (context) {
 
         // This is the range of the sentence we want to save. You can just
-        // add the cursor to the sentence and we'll figure out the bounds of the sentence.
-        var originalRange = context.document.getSelection();
+        // add the cursor to the sentence.
+        var sentence = context.document.getSelection().getTextRanges(['.'], true).first;
 
-        // Get the paragraphs collection of the current selection.
-        var paragraphs = originalRange.paragraphs;
-
-        // Queue a command to load the paragraph collection of the selection.
-        context.load(paragraphs, 'text');
-        context.load(originalRange, 'text');
+        // Queue a command to load the sentence text.
+        context.load(sentence, 'text');
 
         // Synchronize the document state by executing the queued commands,
         // and return a promise to indicate task completion.
         return context.sync()
-            .then(function() {
+            .then(function () {
 
-                if (paragraphs.items.length === 1) {
-                    // The range exists within a single paragraph. Now we just
-                    // need to get the paragraph.
+                // Here we save the sentence text as boilerplate in
+                // local storage. The text is saved without formatting.
+                var sentenceName = document.getElementById('inputAddBoilerplateSentence').value;
+                saveBoilerplate(sentenceName, sentence.text, 'sentence');
 
-                    // This essentially gets the paragraph where this range exists. We don't have an
-                    // expand to paragraph, but this approach gives the same results.
-                    var paragraph = paragraphs.items[0];
-
-                    // Queue a command to get all of the sentences in the paragraph.
-                    // We'll include the delimiters because we want a complete sentence.
-                    var ranges = paragraph.splitTextRanges(['.'], false, true);
-
-                    // Queue a command to load the sentences and their text.
-                    context.load(ranges, 'text');
-
-                    // Synchronize the document state by executing the queued commands,
-                    // and return a promise to indicate task completion. We're passing
-                    // the array of sentence ranges to the next promise.
-                    return context.sync(ranges);
-                }
-                else {
-                    // You've selected zero or more than one paragraph.
-                    console.log('Please select a single paragraph');
-                    return;
-                }
-            }).then(function(sentences) {
-
-                if (sentences) {
-                    var callbacklist = [];
-
-                    // Compare our original selection range with the sentences
-                    // returned by splitTextRanges. We call this function for
-                    // each sentence.
-                    function getRangeLocation(count) {
-                        var rangeLocation = sentences.items[count].compareLocationWith(originalRange);
-                        return context.sync().then(function() {
-                            if (rangeLocation.value === Word.LocationRelation.contains) {
-                                // Here we save the sentence text as boilerplate in
-                                // local storage. The text is saved without formatting.
-                                var sentenceName = document.getElementById('inputAddBoilerplateSentence').value;
-                                saveBoilerplate(sentenceName, sentences.items[count].text, 'sentence');
-                            }
-                        });
-                    }
-
-                    // Add each call to getRangeLocation to an array of callbacks.
-                    // We're doing this so that we can maintain the index of each
-                    // sentence we want to call.
-                    for (var r = 0; r < sentences.items.length; r++) {
-                        callbacklist.push(
-                            (function(r) {
-                                return function() {
-                                    getRangeLocation(r);
-                                }
-                            })(r)
-                        )
-                    }
-
-                    // Call each instance of getRangeLocation that we added to
-                    // the array of callbacks in callbacklist.
-                    for (var callback in callbacklist) {
-                        callbacklist[callback].call(this);
-                    }
-                }
             })
-    }).catch(function(error) {
+    }).catch(function (error) {
         console.log('Error: ' + JSON.stringify(error));
         if (error instanceof OfficeExtension.Error) {
             console.log('Debug info: ' + JSON.stringify(error.debugInfo));
@@ -110,7 +43,7 @@ function addBoilerplateSentence() {
  **/
 function addBoilerplateParagraph() {
 
-    Word.run(function(context) {
+    Word.run(function (context) {
 
         // Get the paragraphs collection of the current selection.
         var paragraphs = context.document.getSelection().paragraphs;
@@ -121,7 +54,7 @@ function addBoilerplateParagraph() {
         // Synchronize the document state by executing the queued commands,
         // and return a promise to indicate task completion.
         return context.sync()
-            .then(function() {
+            .then(function () {
 
                 if (paragraphs.items.length === 1) {
                     // The range exists within a single paragraph. Now we just
@@ -141,7 +74,7 @@ function addBoilerplateParagraph() {
                     console.log('Please select a single paragraph');
                 }
             })
-    }).catch(function(error) {
+    }).catch(function (error) {
         console.log('Error: ' + JSON.stringify(error));
         if (error instanceof OfficeExtension.Error) {
             console.log('Debug info: ' + JSON.stringify(error.debugInfo));
@@ -203,7 +136,7 @@ function selectBoilerplate() {
  * @param type The type of boilerplate. This can be a paragraph, sentence, or section.
  **/
 function insertBoilerplate(text, type) {
-    Word.run(function(context) {
+    Word.run(function (context) {
 
         // Queue a command to get the current selection.
         var selection = context.document.getSelection();
@@ -222,7 +155,7 @@ function insertBoilerplate(text, type) {
         // and return a promise to indicate task completion.
         return context.sync();
 
-    }).catch(function(error) {
+    }).catch(function (error) {
         console.log('Error: ' + JSON.stringify(error));
         if (error instanceof OfficeExtension.Error) {
             console.log('Debug info: ' + JSON.stringify(error.debugInfo));

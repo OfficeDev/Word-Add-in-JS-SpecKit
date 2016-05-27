@@ -2,12 +2,12 @@
  * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-(function() {
+(function () {
     "use strict";
 
     // The initialize function is run each time a page of the add-in is loaded into the task pane.
-    Office.initialize = function(reason) {
-        $(document).ready(function() {
+    Office.initialize = function (reason) {
+        $(document).ready(function () {
 
             // Use this to check whether the new API is supported in the Word client.
             // The compareLocationWith and splitTextRanges method calls will be
@@ -78,7 +78,7 @@
         // Fetch the template and then insert it into the current document's body.
         var urlPromise = httpGetAsync(getTemplateUrl);
         urlPromise.then(insertFileIntoBody)
-            .catch(function(err) {
+            .catch(function (err) {
                 console.log('Error: ' + err);
             });
     }
@@ -92,7 +92,7 @@
      **/
     function insertFileIntoBody(templateBase64) {
         // Entry point for accessing the Word object model.
-        return Word.run(function(context) {
+        return Word.run(function (context) {
 
             // Queue a command to insert the template into the current document.
             var body = context.document.body;
@@ -106,7 +106,7 @@
                 .then(getBlackList)
                 .then(getBoilerplate)
                 .then(context.sync);
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log('Error: ' + JSON.stringify(error));
             if (error instanceof OfficeExtension.Error) {
                 console.log('Debug info: ' + JSON.stringify(error.debugInfo));
@@ -131,11 +131,11 @@
             // Call the service to get the blacklist, and then cache it in
             // localStorage, then return the promise.
             return httpGetAsync(getBlacklistUrl)
-                .then(function(json) {
+                .then(function (json) {
                     localStorage.setItem('badwordcache', json);
                 });
         } else {
-            return Q.fcall(function() {
+            return Q.fcall(function () {
                 return 'The bad words cache exists.';
             });
         }
@@ -155,7 +155,7 @@
         // Call the service to get the boilerplate and add it to localStorage,
         // then return the promise.
         return httpGetAsync(getBoilerplateUrl)
-            .then(function(json) {
+            .then(function (json) {
 
                 // Put the array of bad words into local storage so that we can
                 // access them.
@@ -190,10 +190,10 @@
         var boilerplate = localStorage.getItem('boilerplate');
 
         httpPostAsync(postBoilerplateUrl, boilerplate)
-            .then(function(value) {
+            .then(function (value) {
                 console.log(value);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log('Error: ' + JSON.stringify(error));
             });
     }
@@ -201,12 +201,11 @@
     /**
      * GET helper to call a service.
      *
-     * @param theUrl {string} The URL of the service.
-     * @param callback {function} The callback function.
+     * @param url {string} The URL of the service.
      */
     function httpGetAsync(url) {
 
-        return Q.Promise(function(resolve, reject) {
+        return Q.Promise(function (resolve, reject) {
             var request = new XMLHttpRequest();
 
             request.open("GET", url, true);
@@ -231,9 +230,8 @@
     /**
      * POST helper to call a service.
      *
-     * @param theUrl {string} The URL of the service.
+     * @param url {string} The URL of the service.
      * @param payload {string} The JSON payload.
-     * @param callback {function} The callback function.
      */
     function httpPostAsync(url, payload) {
         var request = new XMLHttpRequest();
@@ -241,16 +239,21 @@
 
         request.open("POST", url, true);
         request.setRequestHeader("Content-type", "application/json");
-        request.onreadystatechange = onreadystatechange;
-        request.send(payload);
 
-        function onreadystatechange() {
-            if (request.readyState === 4 && request.status === 200) {
-                deferred.resolve("Successful post");
+        request.onload = function () {
+            if (request.status === 200) {
+                deferred.resolve("Successful boilerplate save.");
             } else {
                 deferred.reject(new Error('Status code: ' + request.status));
             }
-        }
+        };
+
+        request.onerror = function () {
+            deferred.reject(new Error('Status code: ' + request.status));
+        };
+
+        request.send(payload);
+
         return deferred.promise;
     }
 
