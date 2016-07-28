@@ -19,7 +19,7 @@ Obtenga información sobre cómo crear un complemento que capture e inserte text
 ## Requisitos previos
 
 * Word 2016 para Windows, compilación 16.0.6727.1000 o posterior.
-* [Nodo y npm](https://nodejs.org/en/)
+* [Node y npm](https://nodejs.org/en/)
 * [GIT Bash](https://git-scm.com/downloads): debe usar una compilación posterior, ya que las compilaciones anteriores pueden mostrar un error al generar los certificados.
 
 ## Configurar el proyecto
