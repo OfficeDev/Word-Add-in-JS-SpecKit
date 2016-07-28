@@ -19,7 +19,7 @@ Découvrez comment vous pouvez créer un complément qui capture et insère du t
 ## Conditions requises
 
 * Word 2016 pour Windows, build 16.0.6727.1000 ou ultérieur.
-* [NÅ“ud et npm](https://nodejs.org/en/)
+* [Node et npm](https://nodejs.org/en/)
 * [GIT Bash](https://git-scm.com/downloads) - Vous devez utiliser une version ultérieure, car les builds antérieurs peuvent afficher une erreur lors de la génération de certificats.
 
 ## Configurer le projet

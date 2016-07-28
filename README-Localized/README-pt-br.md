@@ -19,7 +19,7 @@ Saiba como você pode criar um suplemento que captura e insere texto clichê e c
 ## Pré-requisitos
 
 * Word 2016 para Windows, compilação 16.0.6727.1000 ou superior.
-* [Nó e npm](https://nodejs.org/en/)
+* [Node e npm](https://nodejs.org/en/)
 * [Git Bash](https://git-scm.com/downloads) - Você deve usar uma versão mais recente já que as versões anteriores podem mostrar um erro ao gerar os certificados.
 
 ## Configurar o projeto
