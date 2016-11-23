@@ -39,10 +39,10 @@ function validateAgainstBlacklist() {
 
         // Queue a command to get all the words in the document.
         // The words in the document are contained in a collection of Range objects.
-        var words = body.splitTextRanges(delimiters, true, true, true);
+        var range = body.getRange();
+        var words = range.split(delimiters, true, true, true);
 
         // Queue a command to load the ranges that represent words.
-
         context.load(words, 'text');
 
         // Synchronize the document state by executing the queued command to
