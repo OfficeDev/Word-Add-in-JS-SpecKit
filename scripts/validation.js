@@ -119,8 +119,7 @@ function notifyFoundWords(arrayOfFoundBlackListWords) {
         // Call the dialog API.
         Office.context.ui.displayDialogAsync(url, {
             height: 30,
-            width: 20,
-            requireHTTPS: true
+            width: 20            
         }, function(asyncResult) {
             dialog = asyncResult.value;
 
