@@ -1,3 +1,16 @@
+---
+topic: sample
+products:
+- Word
+- Office 365
+languages:
+- JavaScript
+extensions:
+  contentType: samples
+  technologies:
+  - Add-ins
+  createdDate: 3/24/2016 12:45:01 PM
+---
 # Word Add-in JavaScript SpecKit
 
 Learn how you can create an add-in that captures and inserts boilerplate text, and how you can implement a simple document validation process.
