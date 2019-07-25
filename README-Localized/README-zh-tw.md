@@ -1,3 +1,16 @@
+---
+page_type: sample
+products:
+- office-word
+- office-365
+languages:
+- javascript
+extensions:
+  contentType: samples
+  technologies:
+  - Add-ins
+  createdDate: 3/24/2016 12:45:01 PM
+---
 # <a name="word-add-in-javascript-speckit"></a>Word 增益集 JavaScript SpecKit
 
 了解如何建立增益集，擷取並插入重複使用文字，以及如何實作簡單的文件驗證程序。
@@ -112,8 +125,7 @@ authorCustomXml.js 包含用於取得和設定預設文件屬性的方法。
 
 ## <a name="additional-resources"></a>其他資源
 
-* 
-  [Office 增益集文件](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* [Office 增益集文件](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
 * [Office 開發人員中心](http://dev.office.com/)
 * [Office 365 API 入門專案和程式碼範例](http://msdn.microsoft.com/en-us/office/office365/howto/starter-projects-and-code-samples)
 

@@ -1,3 +1,16 @@
+---
+page_type: sample
+products:
+- office-word
+- office-365
+languages:
+- javascript
+extensions:
+  contentType: samples
+  technologies:
+  - Add-ins
+  createdDate: 3/24/2016 12:45:01 PM
+---
 # <a name="word-add-in-javascript-speckit"></a>Complément Word JavaScript SpecKit
 
 Découvrez comment vous pouvez créer un complément qui capture et insère du texte réutilisable, ainsi que la façon dont vous pouvez implémenter un processus de validation de document simple.
@@ -112,8 +125,7 @@ Si vous avez des questions générales sur le développement de Microsoft Office
 
 ## <a name="additional-resources"></a>Ressources supplémentaires
 
-* 
-  [Documentation de complément Office](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* [Documentation de complément Office](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
 * [Centre de développement Office](http://dev.office.com/)
 * [Projets de démarrage et exemples de code des API Office 365](http://msdn.microsoft.com/en-us/office/office365/howto/starter-projects-and-code-samples)
 

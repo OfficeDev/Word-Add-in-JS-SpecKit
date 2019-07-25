@@ -112,8 +112,7 @@
 
 ## <a name="additional-resources"></a>Дополнительные ресурсы
 
-* 
-  [Документация по надстройкам Office](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* [Документация по надстройкам Office](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
 * [Центр разработки для Office](http://dev.office.com/)
 * [Проекты API Office 365 и примеры кода для начинающих](http://msdn.microsoft.com/en-us/office/office365/howto/starter-projects-and-code-samples)
 

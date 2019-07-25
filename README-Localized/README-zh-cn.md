@@ -1,3 +1,16 @@
+---
+page_type: sample
+products:
+- office-word
+- office-365
+languages:
+- javascript
+extensions:
+  contentType: samples
+  technologies:
+  - Add-ins
+  createdDate: 3/24/2016 12:45:01 PM
+---
 # <a name="word-add-in-javascript-speckit"></a>Word 外接程序 JavaScript SpecKit
 
 了解如何创建捕获和插入样本文字的外接程序，以及如何实施一个简单的文档验证过程。
@@ -112,8 +125,7 @@ authorCustomXml.js 包含用于获取和设置默认文档属性的方法。
 
 ## <a name="additional-resources"></a>其他资源
 
-* 
-  [Office 外接程序文档](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* [Office 外接程序文档](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
 * [Office 开发人员中心](http://dev.office.com/)
 * [Office 365 API 入门项目和代码示例](http://msdn.microsoft.com/en-us/office/office365/howto/starter-projects-and-code-samples)
 

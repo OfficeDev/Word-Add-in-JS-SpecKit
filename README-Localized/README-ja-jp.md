@@ -1,3 +1,16 @@
+---
+page_type: sample
+products:
+- office-word
+- office-365
+languages:
+- javascript
+extensions:
+  contentType: samples
+  technologies:
+  - Add-ins
+  createdDate: 3/24/2016 12:45:01 PM
+---
 # <a name="word-add-in-javascript-speckit"></a>Word アドインの JavaScript SpecKit
 
 定型句をキャプチャして挿入するアドインの作成方法について説明します。また、簡単なドキュメントの検証プロセスを実装する方法について説明します。
@@ -112,8 +125,7 @@ Microsoft Office 365 開発全般の質問につきましては、「[スタッ�
 
 ## <a name="additional-resources"></a>その他の技術情報
 
-* 
-  [Office アドインのドキュメント](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
+* [Office アドインのドキュメント](https://msdn.microsoft.com/en-us/library/office/jj220060.aspx)
 * [Office デベロッパー センター](http://dev.office.com/)
 * [Office 365 API スタート プロジェクトとコード サンプル](http://msdn.microsoft.com/en-us/office/office365/howto/starter-projects-and-code-samples)
 
