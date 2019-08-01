@@ -1,17 +1,6 @@
----
-page_type: sample
-products:
-- office-word
-- office-365
-languages:
-- javascript
-extensions:
-  contentType: samples
-  technologies:
-  - Add-ins
-  createdDate: 3/24/2016 12:45:01 PM
----
-# Word Add-in JavaScript SpecKit
+# [ARCHIVED] Word Add-in JavaScript SpecKit
+
+**Note:** This repo is archived and no longer actively maintained. Security vulnerabilities may exist in the project, or its dependencies. If you plan to reuse or run any code from this repo, be sure to perform appropriate security checks on the code or dependencies first. Do not use this project as the starting point of a production Office Add-in. Always start your production code by using the Office/SharePoint development workload in Visual Studio, or the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office), and follow security best practices as you develop the add-in. 
 
 Learn how you can create an add-in that captures and inserts boilerplate text, and how you can implement a simple document validation process.
 
